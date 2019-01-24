@@ -1,6 +1,6 @@
 .App {
   
-  background-color:#181818;
+  background-color:black;
   color: white;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: bold;
@@ -23,17 +23,17 @@
   padding: 1%;
 }
 .my-list1{
-  background-color: #181818;
+  background-color: black;
   float: right;
   width:100%;
 }
 .my-list{
-  background-color: #181818;
+  background-color: black;
   float:left;
   margin-left: 5%;
 }
 .updated-mylist{
-  background-color: #535b6a;
+  background-color:black;
   height: auto;
   width:100%
 }

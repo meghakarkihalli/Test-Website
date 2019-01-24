@@ -53,16 +53,31 @@ class App extends Component {
         temp1.title = this.state.Recommendation[index].title;
         temp1.img = this.state.Recommendation[index].img;
         this.state.MyListItem.push(temp1);
-        this.forceUpdate();
       }     
-      
+      const temp = Object.assign([], this.state.Recommendation);
+      temp.splice(index,1);
+      this.setState({Recommendation:temp})
+      this.forceUpdate();
     }
 
     handleRemove = (index,event) => {
-      console.log(index)
-      const temp2 = Object.assign([], this.state.MyListItem);
-      temp2.splice(index,1);
-      this.setState({MyListItem:temp2})
+      let flag2 = true;
+      const temp = Object.assign([], this.state.MyListItem);
+      temp.splice(index,1);
+      const temp2 = Object.assign({}, this.state.Recommendation[0]);
+      this.state.Recommendation.map((item)=>{
+          if(item.id === this.state.MyListItem[index].id)
+            flag2 = false;
+      })
+      if(flag2)
+      {
+        temp2.id = this.state.MyListItem[index].id;
+        temp2.title = this.state.MyListItem[index].title;
+        temp2.img = this.state.MyListItem[index].img;
+        this.state.Recommendation.push(temp2);
+
+      }
+      this.setState({MyListItem:temp})
       
     }
 
@@ -86,10 +101,7 @@ class App extends Component {
   render() {
     return (
 		<div className="App">
-			<div className="App-header">
-				<img className="App-logo" src={logo}/>
-				<div className="heading"><h1>Home Page</h1></div>
-			</div>
+			
 
 			<div  className="my-list1">
 				<h2>My List</h2> 
@@ -130,7 +142,7 @@ class App extends Component {
             onMouseEnter={this.mouseIn1} 
              onMouseLeave={this.mouseOut1}>Add</Tiles>
             <div className="btn" 
-            onClick={this.handleRemove.bind(this, index)}>{this.state.mouseAction1 ?<button>Add</button> : null}</div>
+            onClick={this.handleAdd.bind(this, index)}>{this.state.mouseAction1 ?<button>Add</button> : null}</div>
            </div>
             )
 				})
