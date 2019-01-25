@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import data from './list.json';
-import logo from './logo.png';
 import Tiles from './components/tiles.js';
 import './App.css';
-
-
 
 class App extends Component {
   constructor()
@@ -16,29 +12,12 @@ class App extends Component {
         mouseAction: false,
         mouseAction1: false
       };
-      
     }
 
-    mouseIn = () =>
-    {
-     
-      this.setState({mouseAction:true})
-    }
-
-    mouseOut = () =>
-    {
-      this.setState({mouseAction:false})
-    }
-    mouseIn1 = () =>
-    {
-      
-      this.setState({mouseAction1:true})
-    }
-
-    mouseOut1 = () =>
-    {
-      this.setState({mouseAction1:false})
-    }
+    mouseIn = () => this.setState({mouseAction:true})
+    mouseOut = () => this.setState({mouseAction:false})
+    mouseIn1 = () => this.setState({mouseAction1:true})
+    mouseOut1 = () => this.setState({mouseAction1:false})
 
     handleAdd = (index, event) => {
       const temp1 = Object.assign({}, this.state.MyListItem[0]);
@@ -75,54 +54,41 @@ class App extends Component {
         temp2.title = this.state.MyListItem[index].title;
         temp2.img = this.state.MyListItem[index].img;
         this.state.Recommendation.push(temp2);
-
       }
-      this.setState({MyListItem:temp})
-      
+      this.setState({MyListItem:temp})  
     }
-
-
-
-
 
     componentWillMount()
     {  
-      data.mylist.map((item, index) => {
-          return this.state.MyListItem.push(item)
-      })
-     // console.log(this.state.MyListItem)
-      data.recommendations.map((item, index) => {
-        return this.state.Recommendation.push(item)
-      })
-     // console.log(this.state.Recommendation)
-    }
-	
-	
+      fetch("/list.json")
+      .then(response => response.json())
+      .then(json => { 
+        this.setState({MyListItem:json.mylist})
+        this.setState({Recommendation:json.recommendations})
+      })   
+    }	
   render() {
     return (
 		<div className="App">
-			
-
 			<div  className="my-list1">
 				<h2>My List</h2> 
-				<div>
+      	<div>
 				{
 					this.state.MyListItem.map((item,index) => {
 					return(
             <div className = "my-list">
             <Tiles
-						title = {item.title}
-						key = {item.id}
-            img={item.img}
-            onMouseEnter={this.mouseIn} 
-             onMouseLeave={this.mouseOut}
-            />
+						  title = {item.title}
+						  key = {item.id}
+              img={item.img}
+              onMouseEnter={this.mouseIn} 
+              onMouseLeave={this.mouseOut}/>
              <div className="btn" 
-             onClick={this.handleRemove.bind(this, index)}>{this.state.mouseAction ?<button>Remove</button> : null}</div>
+              onClick={this.handleRemove.bind(this, index)}>{this.state.mouseAction ?<button>Remove</button> : null}</div>
             </div>
            )
 					})
-				}
+        }
 				</div>
 			</div>
 
@@ -130,21 +96,20 @@ class App extends Component {
 				<br/><br/>
 				<h2>Recommendations</h2>
 				<div>
-				{
-          
+				{ 
 					this.state.Recommendation.map((item,index) => {
 					return(
             <div className="my-list">
             <Tiles
-						title = {item.title}
-						key = {item.id}
-						img={item.img}
-            onMouseEnter={this.mouseIn1} 
-             onMouseLeave={this.mouseOut1}>Add</Tiles>
+						  title = {item.title}
+						  key = {item.id}
+						  img={item.img}
+              onMouseEnter={this.mouseIn1} 
+              onMouseLeave={this.mouseOut1}/>
             <div className="btn" 
-            onClick={this.handleAdd.bind(this, index)}>{this.state.mouseAction1 ?<button>Add</button> : null}</div>
+              onClick={this.handleAdd.bind(this, index)}>{this.state.mouseAction1 ?<button>Add</button> : null}</div>
            </div>
-            )
+          )
 				})
 				}
 				</div>
@@ -153,9 +118,7 @@ class App extends Component {
 			<div className="updated-mylist">
 				<br/><br/>
 				<h2>My List</h2>
-				{this.state.MyListItem.map((item)=>
-					<ul>{item.title}</ul>
-				)}
+				{this.state.MyListItem.map((item) => <ul>{item.title}</ul>)}
 			</div>
 		</div>
     );
