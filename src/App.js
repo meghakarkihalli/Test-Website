@@ -62,7 +62,7 @@ class App extends Component {
     {  
       fetch("/list.json")
       .then(response => response.json())
-      .then(json => { 
+      .then(json => {
         this.setState({MyListItem:json.mylist})
         this.setState({Recommendation:json.recommendations})
       })   
