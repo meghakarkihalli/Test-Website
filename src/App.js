@@ -3,20 +3,31 @@ import Tiles from './components/tiles.js';
 import './App.css';
 
 class App extends Component {
+  
   constructor()
     {
       super();
       this.state = {
         MyListItem:[],
         Recommendation:[],
-        mouseAction: false,
-        mouseAction1: false
+        mouseAction: [],
+        mouseAction1: []
       };
     }
 
-    mouseIn = () => this.setState({mouseAction:true})
+    mouseIn = (index) => {
+      let temp = this.state.mouseAction;
+      temp[index] = true;
+      this.setState({mouseAction:temp})
+      //console.log(temp)
+    }
     mouseOut = () => this.setState({mouseAction:false})
-    mouseIn1 = () => this.setState({mouseAction1:true})
+    mouseIn1 = (index) => {
+      let temp = this.state.mouseAction1;
+      temp[index] = true;
+      this.setState({mouseAction1:temp})
+      //console.log(temp)
+    }
     mouseOut1 = () => this.setState({mouseAction1:false})
 
     handleAdd = (index, event) => {
@@ -32,6 +43,7 @@ class App extends Component {
         temp1.title = this.state.Recommendation[index].title;
         temp1.img = this.state.Recommendation[index].img;
         this.state.MyListItem.push(temp1);
+        this.state.mouseAction.push(false)
       }     
       const temp = Object.assign([], this.state.Recommendation);
       temp.splice(index,1);
@@ -54,18 +66,29 @@ class App extends Component {
         temp2.title = this.state.MyListItem[index].title;
         temp2.img = this.state.MyListItem[index].img;
         this.state.Recommendation.push(temp2);
+        this.state.mouseAction1.push(false)
       }
       this.setState({MyListItem:temp})  
     }
 
     componentWillMount()
     {  
+      var count = 0;
       fetch("/list.json")
       .then(response => response.json())
       .then(json => {
         this.setState({MyListItem:json.mylist})
         this.setState({Recommendation:json.recommendations})
-      })   
+        json.mylist.map(()=>{
+          this.state.mouseAction.push(false)
+
+        })
+        json.recommendations.map(()=>{
+          this.state.mouseAction1.push(false)
+          
+        })
+      })
+      console.log(this.state.mouseAction)
     }	
   render() {
     return (
@@ -81,10 +104,10 @@ class App extends Component {
 						  title = {item.title}
 						  key = {item.id}
               img={item.img}
-              onMouseEnter={this.mouseIn} 
+              onMouseEnter={this.mouseIn.bind(this,index)} 
               onMouseLeave={this.mouseOut}/>
              <div className="btn" 
-              onClick={this.handleRemove.bind(this, index)}>{this.state.mouseAction ?<button>Remove</button> : null}</div>
+              onClick={this.handleRemove.bind(this, index)}>{this.state.mouseAction[index] ?<button>Remove</button> : null}</div>
             </div>
            )
 					})
@@ -104,10 +127,10 @@ class App extends Component {
 						  title = {item.title}
 						  key = {item.id}
 						  img={item.img}
-              onMouseEnter={this.mouseIn1} 
+              onMouseEnter={this.mouseIn1.bind(this, index)} 
               onMouseLeave={this.mouseOut1}/>
             <div className="btn" 
-              onClick={this.handleAdd.bind(this, index)}>{this.state.mouseAction1 ?<button>Add</button> : null}</div>
+              onClick={this.handleAdd.bind(this, index)}>{this.state.mouseAction1[index] ?<button>Add</button> : null}</div>
            </div>
           )
 				})
