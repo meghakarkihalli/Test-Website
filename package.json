@@ -2,9 +2,9 @@
   "name": "test-website",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://myname.github.io/myapp",
   "dependencies": {
     "axios": "^0.18.0",
-    "gh-pages": "^2.0.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
@@ -20,7 +20,6 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "http://myname.github.io/myapp",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -29,5 +28,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
+  }
 }

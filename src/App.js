@@ -19,17 +19,26 @@ class App extends Component {
       let temp = this.state.mouseAction;
       temp[index] = true;
       this.setState({mouseAction:temp})
-      //console.log(temp)
+      console.log(this.state.mouseAction)
     }
-    mouseOut = () => this.setState({mouseAction:false})
+    mouseOut = (index) =>  {
+      let temp = this.state.mouseAction;
+      temp[index] = false;
+      this.setState({mouseAction:temp})
+      console.log(this.state.mouseAction)
+    }
     mouseIn1 = (index) => {
       let temp = this.state.mouseAction1;
       temp[index] = true;
       this.setState({mouseAction1:temp})
-      //console.log(temp)
+      console.log(this.state.mouseAction1)
     }
-    mouseOut1 = () => this.setState({mouseAction1:false})
-
+    mouseOut1 = (index) => {
+      let temp = this.state.mouseAction1;
+      temp[index] = false;
+      this.setState({mouseAction1:temp})
+      console.log(this.state.mouseAction1)
+    }
     handleAdd = (index, event) => {
       const temp1 = Object.assign({}, this.state.MyListItem[0]);
       let flag1 = true;
@@ -37,7 +46,7 @@ class App extends Component {
         if(item.id === this.state.Recommendation[index].id)
             flag1 = false;
       })
-      if(flag1)
+      if(flag1 )
       {
         temp1.id = this.state.Recommendation[index].id;
         temp1.title = this.state.Recommendation[index].title;
@@ -47,7 +56,11 @@ class App extends Component {
       }     
       const temp = Object.assign([], this.state.Recommendation);
       temp.splice(index,1);
-      this.setState({Recommendation:temp})
+      const mtemp = Object.assign([], this.state.mouseAction1);
+      mtemp.splice(index,1)
+      this.setState({Recommendation:temp,
+        mouseAction1:mtemp
+      })
       this.forceUpdate();
     }
 
@@ -55,6 +68,8 @@ class App extends Component {
       let flag2 = true;
       const temp = Object.assign([], this.state.MyListItem);
       temp.splice(index,1);
+      const mtemp = Object.assign([], this.state.mouseAction);
+      mtemp.splice(index,1)
       const temp2 = Object.assign({}, this.state.Recommendation[0]);
       this.state.Recommendation.map((item)=>{
           if(item.id === this.state.MyListItem[index].id)
@@ -68,7 +83,9 @@ class App extends Component {
         this.state.Recommendation.push(temp2);
         this.state.mouseAction1.push(false)
       }
-      this.setState({MyListItem:temp})  
+      this.setState({MyListItem:temp,
+        mouseAction:mtemp
+      })  
     }
 
     componentWillMount()
@@ -88,24 +105,24 @@ class App extends Component {
           
         })
       })
-      console.log(this.state.mouseAction)
     }	
   render() {
     return (
 		<div className="App">
 			<div  className="my-list1">
 				<h2>My List</h2> 
-      	<div>
+      	<div >
 				{
 					this.state.MyListItem.map((item,index) => {
 					return(
-            <div className = "my-list">
+            <div className = "my-list"  
+            onMouseLeave={this.mouseOut.bind(this,index)}>
             <Tiles
 						  title = {item.title}
 						  key = {item.id}
               img={item.img}
-              onMouseEnter={this.mouseIn.bind(this,index)} 
-              onMouseLeave={this.mouseOut}/>
+              onMouseEnter={this.mouseIn.bind(this,index)}
+             />
              <div className="btn" 
               onClick={this.handleRemove.bind(this, index)}>{this.state.mouseAction[index] ?<button>Remove</button> : null}</div>
             </div>
@@ -122,13 +139,14 @@ class App extends Component {
 				{ 
 					this.state.Recommendation.map((item,index) => {
 					return(
-            <div className="my-list">
+            <div className="my-list"
+            onMouseLeave={this.mouseOut1.bind(this,index)}>
             <Tiles
 						  title = {item.title}
 						  key = {item.id}
 						  img={item.img}
-              onMouseEnter={this.mouseIn1.bind(this, index)} 
-              onMouseLeave={this.mouseOut1}/>
+              onMouseEnter={this.mouseIn1.bind(this, index)}
+              />
             <div className="btn" 
               onClick={this.handleAdd.bind(this, index)}>{this.state.mouseAction1[index] ?<button>Add</button> : null}</div>
            </div>
