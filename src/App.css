@@ -27,11 +27,14 @@
   background-color: black;
   float: right;
   width:100%;
+  
 }
 .my-list{
   background-color: black;
   float:left;
   margin-left: 5%;
+  height: 300px;
+
 }
 .updated-mylist{
   background-color:black;
@@ -40,6 +43,6 @@
 }
 .btn{
   
-  display:hidden;
+  
   margin-left: 5%;
 }
